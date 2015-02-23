@@ -1,81 +1,144 @@
-$( document ).ready( function() {
+var SearchRequest = {
 
-  // Search Request
-  var SearchRequest = {
+  ui: {
+    searchInput: $('#search')
+  },
 
-    ui: {
-      search: $('#search')
-    },
+  // Initialize Function
+  // Sets up UI and runs any
+  // other necessary functions
 
-    // Initialize Fuction
-    // Sets up UI and run any necessary functions for the view
-    init: function() {
-      this.bindUIActions();
-    },
+  init: function() {
+    this.bindUIActions();
+    // console.log('search module');
+  },
 
-    bindUIActions: function() {
+  // Bind UI Actions
 
-      var self = this;
+  bindUIActions: function() {
 
-      this.ui.menuToggle.on('click', function() {
-        self.menuToggle();
+    // console.log('ui');
+
+    var self = this;
+
+    // Bind search function to input
+
+    $('#search').on('keypress', function(e) {
+
+      if ( e.which == 13 ) {
+        // console.log('search submit');
+        self.query();
+      }
+
+    });
+
+  },
+
+  // Get Query
+
+  query: function() {
+
+    var query = $('#search').val();
+
+    this.searchGithub(query);
+
+  },
+
+  // Ajax search github repos
+
+  searchGithub: function(query) {
+
+    self = this;
+
+    var urlQuery = 'https://api.github.com/legacy/repos/search/' + query;
+    // console.log( url );
+
+    $.getJSON( urlQuery, {
+      format: "json"
+    })
+      .done( function(data) {
+
+        // Log the data
+        console.log(data);
+
+        // Log the repo names
+        // _.each(data.repositories, function( repositories ) {
+        //   console.log(repositories.name);
+        // });
+
+        // render the template with
+        // the search results
+        self.resultsTemplate( data );
+
+      })
+      .fail( function() {
+        console.log( "error" );
       });
+  },
 
-      // 'click @ui.menuToggle': 'menuToggle',
-      // 'click @ui.shareWidget': 'shareToggle',
-      // 'click @ui.subMenuToggle': 'subMenuToggle'
+  resultsTemplate: function( data, template ) {
 
-    },
+    // Grab the HTML out of our
+    // template tag and pre-compile it.
+    template = _.template(
+      $( "script.template" ).html()
+    );
 
-    menuToggle: function() {
-      this.ui.menuToggle.toggleClass('active');
-      this.ui.menu.toggleClass('active');
-      this.ui.body.toggleClass('scroll-lock');
-    }
+    // Render the underscore template and
+    // inject in our search results.
+    $('#results-container').html(
+      template( data )
+    );
+  }
 
-  };
-
-  return GlobalView;
+};
 
 
+
+
+// Getting More Info on a Repo
+// ---------------------------
+
+var RepoInfoRequest = {
+
+  // Initialize Function
+  // Sets up UI and runs any
+  // other necessary functions
+
+  init: function() {
+    this.bindUIActions();
+  },
+
+  // Bind UI Actions
+
+  bindUIActions: function() {
+
+    var self = this;
+
+    // Click event for repo info
+
+    $('#repo-info').on('click', function() {
+      self.getRepoInfo();
+    });
+
+  },
+
+  getRepoInfo: function() {
+    var index = this.data('index');
+    console.log( index );
+  }
+
+};
+
+
+
+
+// Initialize the Search App
+// -------------------------
+
+$(document).ready( function () {
+
+  SearchRequest.init();
+  RepoInfoRequest.init();
 
 });
-
-
-/*
-    # Endpoint URL #
-
-    https://api.github.com/legacy/repos/search/{query}
-
-    Note: Github imposes a rate limit of 60 request per minute. Documentation can be found at http://developer.github.com/v3/.
-
-    # Example Response JSON #
-
-    {
-      "meta": {...},
-      "data": {
-        "repositories": [
-          {
-            "type": string,
-            "watchers": number,
-            "followers": number,
-            "username": string,
-            "owner": string,
-            "created": string,
-            "created_at": string,
-            "pushed_at": string,
-            "description": string,
-            "forks": number,
-            "pushed": string,
-            "fork": boolean,
-            "size": number,
-            "name": string,
-            "private": boolean,
-            "language": number
-          },
-          {...},
-          {...}
-        ]
-      }
-    }
-*/
