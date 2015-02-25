@@ -1,0 +1,15 @@
+.button {
+  display: inline-block;
+  margin: 1em 0;
+  padding: 1em 2em;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  background-color: mediumslateblue;
+  box-shadow: 0 0 9px rgba(black,.08);
+  transition: background-color 300ms;
+
+  &:hover {
+    background-color: lighten(mediumslateblue, 5%);
+  }
+}

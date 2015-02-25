@@ -1,0 +1,43 @@
+// Search Loader stying
+// -----------------------------------------------------------------------------
+
+// Loader Variables
+
+$color-1: aquamarine;
+$color-2: hotpink;
+$size: 2em;
+$speed: 500ms;
+
+#loader {
+  display: none;
+  position: absolute;
+  right: 1em;
+  bottom: .65em;
+  width: $size;
+  height: $size;
+  margin: auto;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-width: $size/6;
+    border-style: solid;
+    border-color: $color-1;
+    border-radius: 100%;
+  }
+  &:before { opacity: 0.5; }
+  &:after {
+    border-color: $color-2 transparent transparent;
+    animation: spin $speed linear infinite;
+  }
+  &.active {
+    display: block;
+  }
+}
+
+// Animation
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,18 @@
+// Search Styling
+// -----------------------------------------------------------------------------
+
+.search-input {
+  display: block;
+  position: relative;
+
+  input {
+    background-color: LemonChiffon;
+    box-shadow: 0 0 9px rgba(black,.08);
+    transition: background 300ms, box-shadow 300ms;
+
+    &:focus {
+      background-color: white;
+      box-shadow: 0 0 9px rgba(black,.15);
+    }
+  }
+}

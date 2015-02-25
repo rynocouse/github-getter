@@ -1,0 +1,23 @@
+body {
+  padding: 1em;
+  background: $body-color;
+  font-family: $body-family;
+  font-weight: $body-weight;
+  font-size: $base-font-size;
+  line-height: 1.6;
+  color: $text-color;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 1em;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+}
+
+h1, h2, h3 {
+  font-weight: $headings-weight;
+  color: $headings-color;
+}

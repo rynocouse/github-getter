@@ -1,0 +1,112 @@
+// Search Result Repo Listing
+// -----------------------------------------------------------------------------
+
+.repo-list {
+  margin-top: 2em;
+  padding: 0;
+  width: 100%;
+  list-style-type: none;
+  box-shadow: 0 0 9px rgba(black,.08);
+
+
+  // Repo Info Link
+  a {
+    display: block;
+    background-color: white;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    transition: border 400ms ease;
+
+    &:hover {
+      border-right: 6px solid tomato;
+      border-left: 6px solid tomato;
+    }
+
+    // Alternating Color
+    &:nth-of-type(2n) {
+      background-color: #f6f6f6;
+    }
+  }
+
+    // First
+    .repo-head {
+      position: relative;
+      padding: 1em;
+      background-color: #eee;
+      text-align: left;
+      .repo-name,
+      .repo-owner {
+        display: inline-block;
+        width: 50%;
+        font-weight: bold;
+      }
+    }
+
+    // Listing of each repo and owner
+    .repo {
+      position: relative;
+      padding: 1em;
+      text-align: left;
+      cursor: pointer;
+
+      .repo-name,
+      .repo-owner {
+        display: inline-block;
+        width: 50%;
+      }
+    }
+}
+
+// Repo Details Modal
+// -----------------------------------------------------------------------------
+
+.overlay {
+  position: fixed;
+  padding: 1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-color: rgba(tomato, .95);
+  visibility: hidden;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 600ms ease, visibility 600ms;
+
+  // Close
+  &:before {
+    content: 'Close';
+    position: absolute;
+    top: $base-font-size;
+    left: $base-font-size;
+    font-size: .8em;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  // Overlay Active State
+  &.active {
+    visibility: visible;
+    opacity: 1;
+
+    .repo-details {
+      transform: translateY(-50%) translateX(-50%);
+    }
+  }
+
+  .repo-details {
+    position: absolute;
+    padding: 1em;
+    width: 100%;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 0 9px rgba(black,.08);
+    overflow: scroll;
+    transform: translateY(-300%) translateX(-50%);
+    transition: transform 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
