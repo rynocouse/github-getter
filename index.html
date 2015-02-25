@@ -6,64 +6,32 @@
 
   <title>Search</title>
 
-  <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/styles.css">
 
   <script src="js/jquery.js"></script>
   <script src="js/underscore.js"></script>
   <script src="js/app.js"></script>
+
 </head>
 <body>
 
+  <div class="wrapper">
 
-  <h1>Search GitHub</h1>
-  <input id="search" type="text"/>
+    <article class="search">
+      <h1>What Can I Git Ya?</h1>
+
+      <label class="search-input">
+        Gimme a query and I'll have a look through GitHub
+        <input id="search" type="text" placeholder="Search..."/>
+        <div id="loader"></div>
+      </label>
+    </article>
 
 
-  <h2>Results</h2>
-  <div id="results-container">
-
-    <!-- Underscore Template Definition -->
-    <script type="text/template" class="template">
-
-      <ul>
-        <% _.each( repositories, function( repositories, index ){ %>
-
-          <li>
-
-            <h2><%- repositories.name %></h2>
-            <p><%- repositories.owner %></p>
-            <a href="#" id="repo-info" data-index="<%- index %>">Repository Information</a>
-
-          </li>
-
-        <% }); %>
-      </ul>
-
-    </script>
+    <div id="overlay-container" class="overlay"></div>
+    <div id="results-container"></div>
 
   </div>
 
-  <div id="overlay-container">
-
-    <!-- <script type="text/template" class="template">
-
-      <ul>
-        <% _.each( repositories, function( repositories, index ){ %>
-
-          <li>
-
-            <h2><%- repositories.name %></h2>
-            <p><%- repositories.owner %></p>
-            <a href="#" id="more_info" data-index="<%- index %>">Repository Information</a>
-
-          </li>
-
-        <% }); %>
-      </ul>
-
-    </script> -->
-
-  </div>
 </body>
 </html>
