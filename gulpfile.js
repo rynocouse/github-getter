@@ -32,5 +32,5 @@ gulp.task('lint', function() {
 
 
 gulp.task('default', function() {
-  gulp.start('watch');
+  gulp.start('scss', 'lint');
 });
