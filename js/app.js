@@ -1,144 +1,228 @@
-var SearchRequest = {
+$(document).ready( function () {
 
-  ui: {
-    searchInput: $('#search')
-  },
+  // Bind search function to input
 
-  // Initialize Function
-  // Sets up UI and runs any
-  // other necessary functions
+  $('#search').on('keypress', function(e) {
 
-  init: function() {
-    this.bindUIActions();
-    // console.log('search module');
-  },
+    if ( e.which == 13 ) {
+      searchQuery();
+    }
 
-  // Bind UI Actions
+  });
 
-  bindUIActions: function() {
+  // Close Overlay
 
-    // console.log('ui');
+  $('#overlay-container').on('click', function() {
 
-    var self = this;
+    $('#overlay-container').removeClass('active');
 
-    // Bind search function to input
+  });
 
-    $('#search').on('keypress', function(e) {
+});
 
-      if ( e.which == 13 ) {
-        // console.log('search submit');
-        self.query();
+
+// Get the search query
+// from the input
+
+function searchQuery() {
+
+  var query = $('#search').val();
+
+  window.query = query;
+
+  searchGithub(query);
+
+}
+
+
+// Setup cache array to store searches
+
+var cache = [];
+
+// Set global var to store response
+
+var repoData;
+
+
+// Search through github repos
+
+function searchGithub(query) {
+
+  // Show Loader
+  // Hide when request completes
+
+  $('#loader').addClass('active');
+
+  // Set the url with the search query
+  var urlQuery = 'https://api.github.com/legacy/repos/search/' + query;
+
+  // Check cache to see if a
+  // query has already been made
+
+  if ( window.cache !== undefined && window.cache.length > 0 ) {
+
+    ajaxRequest();
+
+  }
+
+  // Check if the query has already been made
+
+  else {
+
+    // console.log( "query not found" );
+
+    findQuery( query );
+
+    //return key;
+
+    ajaxRequest();
+
+  }
+
+  // Look for the query in cache
+
+  function findQuery() {
+
+    // This aint working so I need
+    // to figure out how to find a
+    // query in my cache
+
+    _.find(window.cache, function(v, k) {
+      if (v === query) {
+        key = k;
+        // return true;
+        console.log( "query match" );
+      } else {
+        // return false;
+        console.log( "query not found" );
       }
 
     });
 
-  },
+  }
 
-  // Get Query
+  // The ajax request
 
-  query: function() {
+  function ajaxRequest() {
 
-    var query = $('#search').val();
-
-    this.searchGithub(query);
-
-  },
-
-  // Ajax search github repos
-
-  searchGithub: function(query) {
-
-    self = this;
-
-    var urlQuery = 'https://api.github.com/legacy/repos/search/' + query;
-    // console.log( url );
-
+    // Make an ajax call to the github api
     $.getJSON( urlQuery, {
-      format: "json"
+      format: "json",
     })
       .done( function(data) {
 
-        // Log the data
-        console.log(data);
+        // Hide Loader
+        $('#loader').removeClass('active');
 
-        // Log the repo names
-        // _.each(data.repositories, function( repositories ) {
-        //   console.log(repositories.name);
-        // });
+        // Log the data
+        // console.log(data);
 
         // render the template with
         // the search results
-        self.resultsTemplate( data );
+        resultsTemplate( data );
+        repoInfo( data );
+
+        // add the query to the response object
+        data.query = query;
+
+        // add response to cache
+        window.cache.push(data);
+
+        // set to global
+        window.repoData = data;
 
       })
       .fail( function() {
-        console.log( "error" );
+
+        // Hide Loader
+        $('#loader').removeClass('active');
+
+        console.log("error");
+
       });
-  },
 
-  resultsTemplate: function( data, template ) {
-
-    // Grab the HTML out of our
-    // template tag and pre-compile it.
-    template = _.template(
-      $( "script.template" ).html()
-    );
-
-    // Render the underscore template and
-    // inject in our search results.
-    $('#results-container').html(
-      template( data )
-    );
   }
+}
 
-};
 
+function resultsTemplate(data, template) {
 
+  // pre-compile the template
+
+  template = _.template(
+    '<h2>Search Results for <em>'+ window.query +'</em></h2>'+
+    '<div class="repo-list">'+
+      '<div class="repo-head"><span class="repo-name">Name</span><span class="repo-owner">Owner</span></div>'+
+      '<% _.each( repositories, function( repositories, i ){ %>'+
+        '<a id="repo-info" data-index="<%- i %>">'+
+          '<div class="repo">'+
+            '<span class="repo-name"><%- repositories.name %></span>'+
+            '<span class="repo-owner"><%- repositories.owner %></span>'+
+          '</div>'+
+        '</a>'+
+      '<% }); %>'+
+    '<div>'
+  );
+
+  var compiledtemplate = template;
+
+  // Render the underscore template and
+  // inject in our search results.
+  $('#results-container').html(
+
+    compiledtemplate( data )
+
+  ).hide().slideDown(500);
+}
 
 
 // Getting More Info on a Repo
-// ---------------------------
 
-var RepoInfoRequest = {
+function repoInfo(data, repoData) {
 
-  // Initialize Function
-  // Sets up UI and runs any
-  // other necessary functions
+  // Click event for the displaying the repo info
 
-  init: function() {
-    this.bindUIActions();
-  },
+  $('#results-container').on('click', '#repo-info', function(e, repoData) {
 
-  // Bind UI Actions
+    var i = $(e.currentTarget).data('index');
 
-  bindUIActions: function() {
+    console.log(i);
 
-    var self = this;
+    var currentRepo = window.repoData.repositories[i];
 
-    // Click event for repo info
+    displayRepoInfo(currentRepo);
 
-    $('#repo-info').on('click', function() {
-      self.getRepoInfo();
-    });
+  });
 
-  },
+}
 
-  getRepoInfo: function() {
-    var index = this.data('index');
-    console.log( index );
-  }
+// Display a modal and render
+// the repo details to template
 
-};
+function displayRepoInfo(currentRepo, template) {
 
+  // pre-compile the template
 
+  template = _.template(
+    '<article class="repo-details wrapper">'+
+      '<h2>Repository Details for <em><%- name %></em></h2>'+
+      '<p>Language: <strong><%- language %></strong></p>'+
+      '<p>Owner: <strong><%- owner %></strong></p>'+
+      '<p>Followers: <strong><%- followers %></strong></p>'+
+      '<p>Description: <%- description %></p>'+
+      '<a href="<%- url %>" class="button">GitHub Link</a>'+
+    '</article>'
+  );
 
+  var compiledtemplate = template;
 
-// Initialize the Search App
-// -------------------------
+  // console.log(template);
 
-$(document).ready( function () {
+  // Render the underscore template and
+  // inject in our search results.
+  $('#overlay-container').html(
+    compiledtemplate( currentRepo )
+  )
+  .addClass('active');
 
-  SearchRequest.init();
-  RepoInfoRequest.init();
-
-});
+}
