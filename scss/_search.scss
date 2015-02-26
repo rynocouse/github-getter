@@ -6,7 +6,10 @@
   position: relative;
 
   input {
-    background-color: LemonChiffon;
+    margin-top: .5em;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: solid 4px white;
     box-shadow: 0 0 9px rgba(black,.08);
     transition: background 300ms, box-shadow 300ms;
 
