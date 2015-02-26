@@ -6,6 +6,10 @@ body {
   font-size: $base-font-size;
   line-height: 1.6;
   color: $text-color;
+
+  &.locked {
+    overflow: hidden;
+  }
 }
 
 input {

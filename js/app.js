@@ -5,7 +5,8 @@
       repoData;
 
   // Cache $ selectors
-  var $loader = $('#loader'),
+  var $body = $('body'),
+      $loader = $('#loader'),
       $search = $('#search'),
       $overlayContainer = $('#overlay-container'),
       $resultsContainer = $('#results-container');
@@ -26,6 +27,9 @@
   $overlayContainer.on('click', function() {
 
     $overlayContainer.removeClass('active');
+    
+    // Unlock scrolling on the body
+    $body.removeClass('locked');
 
   });
 
@@ -174,6 +178,8 @@
 
     // Render the underscore template and inject in our search results.
     $overlayContainer.html(template(currentRepo)).addClass('active');
+    // Lock scrolling on the body
+    $body.addClass('locked');
   }
 
 })(window, jQuery, _);
