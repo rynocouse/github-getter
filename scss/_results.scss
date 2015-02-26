@@ -105,7 +105,7 @@
     text-align: center;
     background-color: white;
     box-shadow: 0 0 9px rgba(black,.08);
-    overflow: scroll;
+    overflow: auto;
     transform: translateY(-300%) translateX(-50%);
     transition: transform 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
