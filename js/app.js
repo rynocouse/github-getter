@@ -27,7 +27,7 @@
   $overlayContainer.on('click', function() {
 
     $overlayContainer.removeClass('active');
-    
+
     // Unlock scrolling on the body
     $body.removeClass('locked');
 
@@ -96,7 +96,7 @@
     window.repoData = data;
 
     console.log(window.data);
-  };
+  }
 
 
   // The ajax request
