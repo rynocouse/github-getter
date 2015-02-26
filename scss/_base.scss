@@ -21,7 +21,21 @@ input {
   border-radius: 0;
 }
 
+h1 {
+  text-align: center;
+}
+
 h1, h2, h3 {
   font-weight: $headings-weight;
   color: $headings-color;
+}
+
+
+// Break point
+// -----------------------------------------------------------------------------
+
+@media (min-width: $break-1) {
+  body {
+    font-size: $base-font-size-break;
+  }
 }
