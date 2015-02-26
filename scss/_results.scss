@@ -30,16 +30,7 @@
 
     // First
     .repo-head {
-      position: relative;
-      padding: 1em;
-      background-color: #eee;
-      text-align: left;
-      .repo-name,
-      .repo-owner {
-        display: inline-block;
-        width: 50%;
-        font-weight: bold;
-      }
+      display: none;
     }
 
     // Listing of each repo and owner
@@ -51,8 +42,20 @@
 
       .repo-name,
       .repo-owner {
-        display: inline-block;
-        width: 50%;
+        display: block;
+      }
+
+      .repo-name:before,
+      .repo-owner:before {
+        display: inline;
+        font-weight: bold;
+      }
+
+      .repo-name:before {
+        content: 'Name: ';
+      }
+      .repo-owner:before {
+        content: 'Owner: ';
       }
     }
 }
@@ -108,5 +111,40 @@
     overflow: auto;
     transform: translateY(-300%) translateX(-50%);
     transition: transform 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+// Break point
+// -----------------------------------------------------------------------------
+
+@media (min-width: $break-1) {
+  .repo-list {
+    
+    // First
+    .repo-head {
+      display: block;
+      position: relative;
+      padding: 1em;
+      background-color: #eee;
+      text-align: left;
+      .repo-name,
+      .repo-owner {
+        display: inline-block;
+        width: 50%;
+        font-weight: bold;
+      }
+    }
+
+    .repo {
+      .repo-name,
+      .repo-owner {
+        display: inline-block;
+        width: 50%;
+      }
+      .repo-name:before,
+      .repo-owner:before {
+        display: none;
+      }
+    }
   }
 }
